@@ -1,0 +1,6 @@
+Service Category,Description,Applicable Markets
+Luxury Marketing Suite,"Professional HDR photography, 3D Matterport tours, virtual staging, and drone aerial footage (for detached homes).",All Listings
+Regional Exposure,"Listing on relevant regional MLS systems (e.g., NYC RLS, California CRMLS, Texas MLS), plus national sites (Zillow, Realtor.com).",All Listings
+Global Reach,"Dedicated placement on international luxury portals (e.g., Mansion Global, Juwai) for properties over $1.5 Million.","CA-1, NY-1, TX-1 (and similar)"
+Concierge Coordination,"Coordination of professional home staging, deep cleaning, minor repair recommendations, and pre-inspection services.",Premium & Elite Tiers
+Contract Management,"Negotiation handling, escrow management, title review, and specific coordination for complex co-op/board packages (NY).",All Listings

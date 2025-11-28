@@ -1,0 +1,11 @@
+#,City / Neighborhood,Property Type,List Price,Beds/Baths,Key Features,Timeline Match
+CA-1,LA / West Hollywood,Condo,"$1,495,000",2 Bed / 2 Bath,"Corner unit, concierge, rooftop pool, 2-car garage.",Immediate Close
+CA-2,LA / Studio City,Single Family,"$2,150,000",4 Bed / 3.5 Bath,"Expansive backyard, private office, newly updated kitchen, great school district.",60-90 Days
+CA-3,LA / Silver Lake,Townhouse,"$885,000",3 Bed / 2.5 Bath,"Walkable to shops/transit, private patio, low HOA, ideal for commuters.",Flexible
+NY-1,NYC / Tribeca (Manhattan),Loft Condo,"$4,900,000",3 Bed / 3 Bath,"12ft ceilings, keyed elevator, chef's kitchen, direct views of Hudson River.",Immediate Close
+NY-2,NYC / Park Slope (Brooklyn),Brownstone (Multi),"$2,850,000",4 Bed / 3 Bath,"Owner's duplex + rental unit, original details, private garden, near Prospect Park.",90+ Days
+NY-3,NYC / Astoria (Queens),Co-op Apartment,"$550,000",1 Bed / 1 Bath,"Renovated bath/kitchen, low maintenance fee, 2 blocks to N/W subway, Budget Match.",60-Day Max
+TX-1,Austin / Tarrytown,Single Family,"$1,695,000",5 Bed / 4 Bath,"Smart home, pool/spa, oversized 3-car garage, Must-Have outdoor kitchen.",Flexible
+TX-2,Dallas / Lower Greenville,Duplex,"$625,000",3 Bed / 2.5 Bath,"Excellent investment property, fenced yard, easy access to downtown.",90+ Days
+TX-3,Houston / The Heights,New Construction,"$999,000",4 Bed / 3 Bath,"Updated Kitchen, open concept, close to walking trails, Timeline ready for quick move-in.",Immediate Close
+TX-4,San Antonio / Stone Oak,Single Family,"$410,000",3 Bed / 2 Bath,"Budget Match, excellent schools, garage, well-maintained, ideal starter home.",60-Day Max
