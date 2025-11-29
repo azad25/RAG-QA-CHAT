@@ -6,9 +6,12 @@ from qdrant_client.models import Distance, VectorParams, PointStruct
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_openai import ChatOpenAI  # Added for Novita
 from config import (
     QDRANT_HOST, QDRANT_PORT,
@@ -51,25 +54,31 @@ class RAGEngine:
             "Context: {context}"
         )
         
+        
+        # Create prompt template WITH MessagesPlaceholder for history
         prompt = ChatPromptTemplate.from_messages([
             ("system", system_prompt),
+            MessagesPlaceholder(variable_name="chat_history"),
             ("human", "{question}")
         ])
         
         # Create RAG chain using LCEL
-        def get_context(question):
+        def get_context(inputs: dict) -> str:
+            """Retrieve context for the question"""
+            question = inputs["question"]
             docs = self._search_similar(question)
             return "\n\n".join([doc["content"] for doc in docs])
         
-        self.qa_chain = (
-            {
-                "context": lambda x: get_context(x),
-                "question": RunnablePassthrough()
-            }
+        # Chain without history wrapper
+        self.chain = (
+            RunnablePassthrough.assign(context=get_context)
             | prompt
             | llm
             | StrOutputParser()
         )
+
+        # Store for chat histories (manual)
+        self.store = {}
     
     def _init_collection(self):
         try:
@@ -217,30 +226,62 @@ class RAGEngine:
             print(traceback.format_exc())
             return []
     
-    def ask(self, question: str) -> str:
+    def ask(self, question: str, session_id: str = "default") -> str:
         """Ask a question and get an answer based on the documents"""
         if not self.documents:
             return "No documents loaded. Please add .txt documents to the data directory."
         
         try:
-            response = self.qa_chain.invoke(question)
+            from langchain_core.messages import HumanMessage, AIMessage
+            
+            # Get or create chat history for this session
+            if session_id not in self.store:
+                self.store[session_id] = []
+            
+            chat_history = self.store[session_id]
+            
+            # Invoke chain with question and chat history
+            response = self.chain.invoke({
+                "question": question,
+                "chat_history": chat_history
+            })
+            
+            # Save this exchange to history
+            self.store[session_id].append(HumanMessage(content=question))
+            self.store[session_id].append(AIMessage(content=response))
+            
             return response
         except Exception as e:
             import traceback
             print(traceback.format_exc())
             return f"Error processing question: {str(e)}"
     
-    def ask_with_sources(self, question: str) -> dict:
+    def ask_with_sources(self, question: str, session_id: str = "default") -> dict:
         """Ask a question and return answer with source documents"""
         if not self.documents:
             return {"answer": "No documents loaded", "sources": []}
         
         try:
+            from langchain_core.messages import HumanMessage, AIMessage
+            
+            # Get or create chat history for this session
+            if session_id not in self.store:
+                self.store[session_id] = []
+            
+            chat_history = self.store[session_id]
+            
             # Get relevant documents
             docs = self._search_similar(question)
             
             # Get answer
-            answer = self.qa_chain.invoke(question)
+            answer = self.chain.invoke({
+                "question": question,
+                "chat_history": chat_history
+            })
+            
+            # Save this exchange to history
+            self.store[session_id].append(HumanMessage(content=question))
+            self.store[session_id].append(AIMessage(content=answer))
             
             return {
                 "answer": answer,

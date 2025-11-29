@@ -8,6 +8,7 @@ A Retrieval-Augmented Generation (RAG) service for intelligent question-answerin
 - 🤖 **AI-Powered Responses**: Generates natural language answers using Hugging Face LLM models
 - 📚 **Multi-Document Support**: Indexes multiple document types (listings, services, pricing, terms)
 - 🎯 **Source Attribution**: Returns answer with source documents and relevance scores
+- 🧠 **Conversation Memory**: Maintains context across multiple turns using session IDs
 - ⚡ **Fast & Scalable**: Built with FastAPI and Qdrant vector database
 
 ## Architecture
@@ -117,7 +118,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "question": "Show me properties in Los Angeles"
+  "question": "Show me properties in Los Angeles",
+  "session_id": "user_123"
 }'
 ```
 
@@ -140,7 +142,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-  "question": "What are your commission rates?"
+  "question": "What are your commission rates?",
+  "session_id": "user_123"
 }'
 ```
 
@@ -160,6 +163,19 @@ curl -X 'POST' \
   ]
 }
 ```
+
+### Conversation Context / Memory
+
+The API supports conversation history through the `session_id` parameter. This allows the AI to remember previous interactions and answer follow-up questions.
+
+**Example Flow:**
+
+1. **User**: "Tell me about the condo in West Hollywood." (`session_id`: "session_A")
+2. **AI**: "The West Hollywood Condo (CA-1) is priced at $1,495,000..."
+3. **User**: "What is its price?" (`session_id`: "session_A")
+4. **AI**: "The price is $1,495,000." (AI understands "its" refers to the condo from the previous turn)
+
+If no `session_id` is provided, it defaults to "default". For multi-user support, ensure each user/session has a unique ID.
 
 ### Interactive API Documentation
 

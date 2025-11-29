@@ -7,7 +7,7 @@ rag = RAGEngine()
 
 @app.post("/ask")
 def ask_question(query: Query):
-    result = rag.ask_with_sources(query.question)
+    result = rag.ask_with_sources(query.question, session_id=query.session_id)
     return {
         "question": query.question, 
         "answer": result["answer"],
