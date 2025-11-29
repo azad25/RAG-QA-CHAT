@@ -25,6 +25,9 @@ A Retrieval-Augmented Generation (RAG) service for intelligent question-answerin
                      │  LLM Model   │
                      └──────────────┘
 ```
+## Diagram
+
+![System Diagram](diagram.png)
 
 ## Tech Stack
 
